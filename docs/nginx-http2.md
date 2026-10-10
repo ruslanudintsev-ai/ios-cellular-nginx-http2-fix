@@ -29,8 +29,7 @@ In this case the directive was added only to the apex and www HTTPS virtual host
 Before and after the change, verify configuration syntax and that both protocol paths remain available:
 
 ```sh
-nginx -t
-nginx -s reload
+nginx -t && nginx -s reload
 
 curl --http2 --compressed -sS -o /dev/null \
   -w 'status=%{http_code} version=%{http_version} tls_verify=%{ssl_verify_result}\n' \
@@ -41,7 +40,7 @@ curl --http1.1 --compressed -sS -o /dev/null \
   https://example.com/
 ```
 
-Expected in this case: HTTP/2 returns a successful page response, and forced HTTP/1.1 still succeeds. Also test the actual client and network that showed the problem; command-line checks do not replace that test.
+Expected in this case: the first command reports `version=2`, while forced HTTP/1.1 reports `version=1.1`; both return successful responses. A 200 response without `version=2` does **not** prove that HTTP/2 was negotiated. Also test the actual client and network that showed the problem; command-line checks do not replace that test.
 
 ## Rollback
 
@@ -51,4 +50,4 @@ Remove only the `http2 on;` directives from the affected server blocks, run `ngi
 
 Enabling HTTP/2 on a separate diagnostic vhost was followed by an immediate successful iPhone load. Enabling it on the production vhosts was then followed by an immediate successful load on the same iPhone, production hostname, and cellular connection. HTTP/1.1 fallback continued to work.
 
-This is strong evidence associated with the change, but it does not identify the low-level cause. The observation period was under 24 hours when documented.
+The HTTP/2 change involved a graceful Nginx reload, which could also affect connection state. This is strong evidence associated with the change, but one immediate success does not fully separate the protocol effect from the reload or identify the low-level cause. The observation period was under 24 hours when documented.

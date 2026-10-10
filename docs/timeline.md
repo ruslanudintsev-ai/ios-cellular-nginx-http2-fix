@@ -20,4 +20,4 @@ Dates are shown at day-level to avoid implying timestamp precision not present i
 
 ## Status at publication
 
-The same-production-host before/after observation strongly implicates the protocol change or an interaction with the previous HTTP/1.1 path. It does not reveal the underlying mechanism. Less than 24 hours of post-change observation had elapsed when this case was written; stability follow-up remained pending.
+The same-production-host before/after observation strongly implicates the protocol change or an interaction with the previous HTTP/1.1 path. The change also involved a graceful Nginx reload, so the result cannot fully isolate the effect of the negotiated protocol from a change in connection state. It does not reveal the underlying mechanism. Less than 24 hours of post-change observation had elapsed when this case was written; stability follow-up remained pending.
