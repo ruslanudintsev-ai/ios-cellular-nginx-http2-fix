@@ -1,6 +1,6 @@
 # iPhone Cannot Open an HTTPS Site on Cellular Data? A Real Nginx HTTP/2 Case Study
 
-[English](README.md) | [Русский](README.ru.md)
+**Languages:** [English](README.md) · [Русский](README.ru.md) · [Español](README.es.md) · [Português (Brasil)](README.pt-BR.md) · [简体中文](README.zh-CN.md)
 
 **Case status:** enabling HTTP/2 on the production HTTPS virtual hosts was followed by an immediate successful load on the same iPhone over cellular data, with VPN off. The observation was recorded on 2026-10-10; less than 24 hours had elapsed when this report was prepared, so long-term stability had not yet been established.
 
@@ -18,7 +18,7 @@ A diagnostic vhost was then enabled for HTTP/2. The operator reported that it op
 
 The before-and-after result strongly implicates the HTTP/2 change or an interaction with the previous HTTP/1.1 path. The production verification used the same hostname and certificate before and after the change, which is stronger evidence than the canary comparison.
 
-It does **not** prove a specific Safari, Nginx, TLS, carrier, or HTTP/1.1 defect. The mobile tests were operator-reported and were not instrumented with a timestamped packet capture. Network conditions and browser state can change between attempts. The underlying mechanism remains unknown.
+It does **not** prove a specific Safari, Nginx, TLS, carrier, or HTTP/1.1 defect. The mobile tests were operator-reported and were not instrumented with a timestamped packet capture. Network conditions and browser state can change between attempts. Enabling HTTP/2 also required a graceful Nginx reload, which may have affected connection state. A single successful load does not isolate the protocol switch from the reload. The underlying mechanism remains unknown.
 
 No TLS security settings, cipher policy, application code, DNS, or site content were changed as part of the production HTTP/2 switch. The change was limited to the relevant HTTPS virtual hosts.
 
